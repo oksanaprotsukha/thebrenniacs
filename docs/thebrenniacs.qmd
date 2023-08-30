@@ -5,6 +5,7 @@ format: html
 editor: visual
 ---
 
+<<<<<<< HEAD
 ```{r}
 library(tidyverse)
 library(here)
@@ -20,4 +21,5 @@ bq2 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ2.csv
 bq3 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ3.csv"))
 
 prm <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "PRM.csv"))
+
 ```
