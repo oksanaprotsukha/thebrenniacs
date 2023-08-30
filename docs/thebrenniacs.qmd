@@ -5,7 +5,6 @@ format: html
 editor: visual
 ---
 
-<<<<<<< HEAD
 ```{r}
 library(tidyverse)
 library(here)
