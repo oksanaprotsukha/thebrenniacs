@@ -5,4 +5,19 @@ format: html
 editor: visual
 ---
 
-## 
+```{r}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+# read in the data from /courses/EDS214/group_project/thebrenniacs/data
+
+bq1 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ1.csv"))
+
+bq2 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ2.csv"))
+
+bq3 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ3.csv"))
+
+prm <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "PRM.csv"))
+```
