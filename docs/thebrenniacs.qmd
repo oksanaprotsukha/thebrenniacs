@@ -22,3 +22,10 @@ bq3 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ3.csv
 prm <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "PRM.csv"))
 
 ```
+
+```{r}
+watershed_areas <- bq1 %>% 
+  bind_rows(bq2) %>% 
+  bind_rows(bq3) %>% 
+  bind_rows(prm)
+```
