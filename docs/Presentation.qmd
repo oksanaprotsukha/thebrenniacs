@@ -1,0 +1,79 @@
+---
+title: "The Brenniacs present"
+author: "Charlie Curtin, Flora Hamilton, Oksana Protsukha, Kristina Glass, Haejin Kim"
+format: revealjs
+editor: visual
+---
+
+## Agenda
+
+1.  Objective
+2.  Project setup (server, data, code, ...)
+3.  Team organization (tasks, who did what)
+4.  Results
+5.  Main challenges
+
+## Objective
+
+#### Explore chemicals impact on pH level and water conductivity
+
+-   Ca, Na, K, Mg vs conductivity
+-   SiO2 vs pH
+
+## Team organization
+
+#### Group effort:
+
+1.  Set up git
+2.  Explore data
+2.  Import and tidy data `bind vs join`
+3.  Determine the question to answer
+4.  Create presentation
+
+#### Individual efforts:
+
+1. Create a workflow (Charlie and Kristina)
+2. Bind rows into a single dataset (Kristina)
+3. Peer review the code (Charlie and Kristina)
+4. Reproduce the time-series graphs of the levels of NO3-N and K in water during hurricane Hugo (Oksana)
+5. Explore correlation between conductivity and chemical elements (Flora)
+6. Explore correlation between pH level and chemicals (Haejin)
+
+## Project setup (server, data, code, ...)
+
+#### Server 
+* https://taylor.bren.ucsb.edu/
+* Linux taylor 5.15.0-78-generic
+* R version 4.2.2 (2022-10-31)
+* Platform: x86_64-pc-linux-gnu (64-bit)
+* Ubuntu 22.04.2 LTS
+
+#### Code
+* Code repository: git
+* Version control: github
+* Code repository: https://github.com/oksanaprotsukha/thebrenniacs
+* R packages used:
+** Tidyverse
+** Scale
+** Patchwork
+
+#### Data
+* Shared folder on the server to store data
+* Data source: https://doi.org/10.6073/pasta/570231c2807a6396ced6a89ef7547bd4 
+** Four separate datasets that describe individual sites in Luquillo Mountains:
+*** Chemical composition
+*** Temperature
+*** pH level
+*** Conductivity
+*** etc.
+
+## Results
+
+```{r}
+
+```
+
+
+
+## Main challenges
+
