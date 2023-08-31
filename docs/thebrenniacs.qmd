@@ -152,3 +152,22 @@ level_NO3N <- ggplot(data = watershed_areas_chemistry,
 
 ((level_K / level_NO3N))
 ```
+
+```{r}
+
+##plotting ion concentrations (Na, K, Ca, Mg) against conductivity for all samples (sites + times) to explore the relationship between the two variables## 
+p1_Ca_cond <- ggplot(watershed_areas, aes(x=Ca, y=Cond, color = Sample_ID))+geom_point(alpha = 0.2)+ylim(min=0, max=250) + geom_smooth(method = "lm", se = FALSE) + ylab("Cond. (mS/cm)") + xlab("Concn of Ca (mg/L)") +   theme(legend.position="none")
+
+p2_Na_cond <- ggplot(watershed_areas, aes(x=Na, y=Cond, color = Sample_ID))+geom_point(alpha = 0.2)+ylim(min=0, max=250) + geom_smooth(method = "lm", se = FALSE) + ylab("Cond. (mS/cm)") +  xlab("Concn of Na (mg/L)") 
+
+p3_Mg_cond <- ggplot(watershed_areas, aes(x=Mg, y=Cond, color = Sample_ID))+geom_point(alpha = 0.2)+ylim(min=0, max=250) + geom_smooth(method = "lm", se = FALSE)+  ylab("Cond. (mS/cm)") + xlab("Concn of Mg (mg/L)")  +   theme(legend.position="none") 
+
+p4_K_cond <- ggplot(watershed_areas, aes(x=K, y=Cond, color = Sample_ID))+geom_point(alpha = 0.2)+ylim(min=0, max=250) + geom_smooth(method = "lm", se = FALSE) +  ylab("Cond. (mS/cm)") + xlab("Concn of K (ug/L)")  +   theme(legend.position="none") 
+
+(p1_Ca_cond | p2_Na_cond)/(p3_Mg_cond|p4_K_cond) + plot_annotation('Largely Positive Correl. between Conductivity & Ion Concentrations across Sites*', caption = '* All but BQ1, for K',theme=theme(plot.title=element_text(hjust=0.5))) 
+
+
+##explanation. 
+
+
+```
