@@ -174,8 +174,7 @@ m <- list(l = 50, r = 50, b = 50, t = 50)
 watershed_plot <- subplot(style(level_K, showlegend = FALSE), level_NO3N, nrows = 2, shareX = TRUE, titleY = TRUE) %>% 
   layout(title = list(text = "Nitrate and potassium concentrations in the \n Quebrada Sonodora watershed from 1988-1995", font = t1),
          legend = list(x = 100, y = 0.5),
-         margin = m,
-         shapes = list(vline(.2))) %>% 
+         margin = m) %>% 
   add_annotations(x = .22,
                   y = .35,
                   xref = "paper",
