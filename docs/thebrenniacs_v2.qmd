@@ -1,0 +1,190 @@
+---
+title: "thebrenniacs"
+author: "The Brenniacs"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+# read in the data from /courses/EDS214/group_project/thebrenniacs/data
+
+bq1 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ1.csv"))
+
+bq2 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ2.csv"))
+
+bq3 <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "BQ3.csv"))
+
+prm <- read_csv(here("/courses/EDS214/group_project/thebrenniacs/data", "PRM.csv"))
+```
+
+```{r}
+# check the data integrity across the datasets
+# total number of columns is the same
+# columns are in the same order
+bq1_vec <- names(bq1)
+bq2_vec <- names(bq2)
+bq3_vec <- names(bq3)
+prm_vec <- names(prm)
+
+compare_columns <- data.frame(bq1 = bq1_vec, 
+                              bq2 = bq2_vec,
+                              bq3 = bq3_vec,
+                              prm = prm_vec)
+
+compare_columns$check = ifelse((compare_columns$bq1 == compare_columns$bq2) 
+                               & (compare_columns$bq2 == compare_columns$bq3)
+                               & (compare_columns$bq3 == compare_columns$prm),
+                               "Same", "Diff")
+
+view(compare_columns)
+```
+
+```{r}
+# using bind_rows to append the 4 datasets to each other over shared columns
+watershed_areas <- bq1 %>% 
+  bind_rows(bq2) %>% 
+  bind_rows(bq3) %>% 
+  bind_rows(prm)
+```
+
+```{r}
+# Data Wrangling
+library(zoo)
+# convert dates
+watershed_areas_summary <- watershed_areas %>% 
+  # Convert all dates into ISO8601 format
+  mutate(Sample_Date = lubridate::ymd(watershed_areas$Sample_Date)) %>% 
+  # Create a new column "Period = Year-Month"
+  mutate(Period = zoo::as.yearmon(Sample_Date)) %>% 
+  relocate(Period, .after = Sample_Date) %>% 
+  select(-Code, -Sample_Time) %>% 
+  group_by(Sample_ID, Period) %>% 
+  summarise(across(where(is.numeric), 
+                   list(mean = mean,
+                        sd = sd,
+                        max = max,
+                        min = min),
+                   .names = "{col}_{.fn}"),
+            na.rm = TRUE)
+```
+
+```{r}
+# exploratory plot to see the effects of Hurricane Hugo (Sep 1989), Hurricane George (Sep 1998), and Hurricane Maria (Sep 2017) on nitrate concentrations in the Bisley Watershed
+watershed_areas_NO3N_plot <- watershed_areas_summary %>% 
+  select(Sample_ID, Period, "NO3-N_mean", "NO3-N_max", "NO3-N_sd") %>% 
+  drop_na() %>% 
+  rename(no3nmean = "NO3-N_mean",
+         no3nmax = "NO3-N_max",
+         no3nsd = "NO3-N_sd",
+         period = Period) %>% 
+  ggplot(aes(x = period,
+             y = no3nmean)) +
+  geom_line(aes(color = Sample_ID)) +
+  scale_x_continuous(limits = c(1986, 2020), 
+                     breaks = seq(from = 1986, to = 2020, by = 3),
+                     expand = c(0, 0)) +
+  annotate("text",
+           label = "Hugo, Sep'1989",
+           angle = 90,
+           x = 1989,
+           y = 500,
+           size = 3) +
+    annotate("text",
+           label = "Georges, Sep'1998",
+           angle = 90,
+           x = 1998,
+           y = 500,
+           size = 3) +
+    annotate("text",
+           label = "María, Sep'2017",
+           angle = 90,
+           x = 2017,
+           y = 500,
+           size = 3) +
+  labs(x = "Period", 
+       y = "NO3-N (ug/l)", 
+       title = "Mean nitrate concentration in the Bisley \n watershed from 1986-2019", 
+       color = "stream gauge") +
+  theme_minimal()
+
+watershed_areas_NO3N_plot
+```
+
+```{r}
+library(scales)
+library(plotly)
+
+# drop NA values in visualization
+watershed_areas_chemistry <- watershed_areas %>% 
+  select(Sample_ID, Sample_Date, K, `NO3-N`) %>%
+  drop_na()
+```
+
+```{r}
+# Potassium level plot displaying mean potassium concentration by month from 1988-1995
+level_K <- ggplot(data = watershed_areas_chemistry, 
+                  aes(x = Sample_Date, y = K, color = Sample_ID)) +
+  geom_line() +
+  labs(x = "Period", 
+       y = "K+ (mg/l)", 
+       title = "Nitrate and potassium concentrations in the Quebrada Sonodora watershed from 1988-1995") +
+  scale_x_date(breaks = seq(as.Date("1988-01-01"),
+                            as.Date("1995-01-01"),
+                            by = "1 year"),
+               limits = c(as.Date("1988-01-01"), as.Date("1995-01-01")),
+               expand = c(0, 0),
+               labels = date_format("%Y")) + # Format tick labels as year only
+  theme_minimal()
+```
+
+```{r}
+# Nitrate level plot displaying mean nitrate concentration by month from 1988-1995
+level_NO3N <- ggplot(data = watershed_areas_chemistry, 
+                     aes(x = Sample_Date, y = `NO3-N`, color = Sample_ID)) +
+  geom_line() +
+  labs(x = "Period", 
+       y = "NO3-N (ug/l)", 
+       color = "stream gauge") +
+  scale_x_date(breaks = seq(as.Date("1988-01-01"),
+                            as.Date("1995-01-01"),
+                            by = "1 year"),
+               limits = c(as.Date("1988-01-01"), as.Date("1995-01-01")),
+               expand = c(0, 0),
+               labels = date_format("%Y")) +
+  theme_minimal()
+```
+
+```{r}
+# Using plotly to stack subplots
+
+# create plotly font style to size title and annotation
+t1 <- list(size = 18)
+
+t2 <- list(size = 10)
+
+# plotly margin positioning
+m <- list(l = 50, r = 50, b = 50, t = 50)
+
+# create subplot stacking potassium and nitrate plots, stack plots with shared x-axis and individual y-axes, add title, shift legend position, call margin list to expand background paper
+watershed_plot <- subplot(style(level_K, showlegend = FALSE), level_NO3N, nrows = 2, shareX = TRUE, titleY = TRUE) %>% 
+  layout(title = list(text = "Nitrate and potassium concentrations in the \n Quebrada Sonodora watershed from 1988-1995", font = t1),
+         legend = list(x = 100, y = 0.5),
+         margin = m,
+         shapes = list(vline(.2))) %>% 
+  add_annotations(x = .22,
+                  y = .35,
+                  xref = "paper",
+                  yref = "paper",
+                  text = "Hurricane Hugo (Sep 1989)",
+                  textangle = 270,
+                  font = t2,
+                  showarrow = F)
+
+# call watershed plot
+watershed_plot
+```
