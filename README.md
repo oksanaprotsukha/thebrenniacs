@@ -51,4 +51,4 @@ Lucid link: The Brenniacs’ Work Flow:  <br> https://lucid.app/users/registerOr
 
 **Acknowledgments:** EDS 214, and Professor Brun. All of our mothers and Flora's French Bulldog.
 
-**Logo**: (c) Brenniacs Team 2023 
+**Logo**: (c) MEDS Cohort 2024
