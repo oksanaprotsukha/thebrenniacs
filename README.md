@@ -49,6 +49,6 @@ R packages used: <br>
 ### Workflow:  <br> 
 Lucid link: The Brenniacs’ Work Flow:  <br> https://lucid.app/users/registerOrLogin/free?showLogin=false&invitationId=inv_b9b7a1f4-86ce-422c-84bb-997571300433&productOpt=chart&invitationType=documentAcceptance&returnUrlOverride=%2Flucidchart%2Fe364df89-986b-4a7c-a30e-01e9f2d8c4dd%2Fedit%3Fpage%3D0_0%26invitationId%3Dinv_b9b7a1f4-86ce-422c-84bb-997571300433 <br> 
 
-### Acknowledgments: EDS 214, and Professor Brun. All of our mothers and Flora's French Bulldog.
+**Acknowledgments:** EDS 214, and Professor Brun. All of our mothers and Flora's French Bulldog.
 
 **Logo**: (c) Brenniacs Team 2023 
