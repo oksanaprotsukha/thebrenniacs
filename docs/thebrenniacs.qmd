@@ -141,7 +141,7 @@ level_K <- ggplot(data = watershed_areas_chemistry,
 level_NO3N <- ggplot(data = watershed_areas_chemistry, 
                      aes(x = Sample_Date, y = `NO3-N`, color = Sample_ID)) +
   geom_line() +
-  labs(x = "Period", y = "NO3-N (ug/l") +
+  labs(x = "Period", y = "NO3-N (ug/l)") +
   scale_x_date(breaks = seq(as.Date("1988-01-01"),
                             as.Date("1995-01-01"),
                             by = "1 year"),
@@ -150,7 +150,8 @@ level_NO3N <- ggplot(data = watershed_areas_chemistry,
                labels = date_format("%Y"))+
   theme_minimal()
 
-((level_K / level_NO3N))
+p_no3n_k <- ((level_K / level_NO3N))
+ggsave(here::here("figs","no3n_k_combined.png" ), p_no3n_k)
 ```
 
 ```{r}
@@ -164,10 +165,33 @@ p3_Mg_cond <- ggplot(watershed_areas, aes(x=Mg, y=Cond, color = Sample_ID))+geom
 
 p4_K_cond <- ggplot(watershed_areas, aes(x=K, y=Cond, color = Sample_ID))+geom_point(alpha = 0.2)+ylim(min=0, max=250) + geom_smooth(method = "lm", se = FALSE) +  ylab("Cond. (mS/cm)") + xlab("Concn of K (ug/L)")  +   theme(legend.position="none") 
 
-(p1_Ca_cond | p2_Na_cond)/(p3_Mg_cond|p4_K_cond) + plot_annotation('Largely Positive Correl. between Conductivity & Ion Concentrations across Sites*', caption = '* All but BQ1, for K',theme=theme(plot.title=element_text(hjust=0.5))) 
+p <- (p1_Ca_cond | p2_Na_cond)/(p3_Mg_cond|p4_K_cond) + plot_annotation('Largely Positive Correl. between Conductivity & Ion Concentrations across Sites*', caption = '* All but BQ1, for K',theme=theme(plot.title=element_text(hjust=0.5))) 
+
+ggsave(here::here("figs","conductivity.png" ), p)
 
 
 ##explanation. 
 
 
+```
+
+```{r}
+# Explore the impact of hurricanes on pH level in rivers
+smooth_data<- watershed_areas %>%
+  mutate(year= format(Sample_Date, format = "%Y")) %>%
+  filter(year> 2006 , year< 2014)
+ph <- ggplot(data = watershed_areas,
+                     aes(y = pH, x = Sample_Date)) +
+  scale_x_date(breaks = seq(as.Date("1986-01-01"),
+                            as.Date("2019-01-01"),
+                            by = "5 year"),
+               limits = c(as.Date("1986-01-01"), as.Date("2019-01-01")),
+               expand = c(0, 0),
+               labels = date_format("%Y"))+
+  geom_line(aes(color = Sample_ID))+
+  geom_smooth(data= smooth_data, method = "lm")
+
+p_ph <- (( watershed_areas_NO3N_plot / ph))
+
+ggsave(here::here("figs","pH_level_timeseries.png" ), p_ph)
 ```
